@@ -200,7 +200,7 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;background:#edf
         <div class="tbox">
           <div class="trow"><span class="tl">Subtotal</span><span class="tv" id="t-sub"></span></div>
           <div class="trow tm"><span class="tl">TOTAL CONTADO</span><span class="tv" id="t-contado"></span></div>
-          <div class="trow tc"><span class="tl">Con tarjeta (+10%)</span><span class="tv" id="t-tarjeta"></span></div>
+          <div class="trow tc"><span class="tl">Con tarjeta</span><span class="tv" id="t-tarjeta"></span></div>
           <div class="trow tco"><span class="tl">Comision estimada</span><span class="tv" id="t-comision"></span></div>
         </div>
         <div class="brow">
@@ -251,7 +251,7 @@ html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;background:#edf
         <div class="vs-h">Verifica antes de generar</div>
         <div id="verify-rows"></div>
         <div class="vs-tot"><span>TOTAL CONTADO</span><span id="v-total"></span></div>
-        <div class="vs-card"><span>Con tarjeta (+10%)</span><span id="v-card"></span></div>
+        <div class="vs-card"><span>Con tarjeta</span><span id="v-card"></span></div>
       </div>
       <div class="pda">
         <div class="pda-t">Generar y compartir</div>
@@ -516,7 +516,7 @@ function renderPreview(){
     document.getElementById("pv-tfoot").innerHTML=
       "<tr><td colspan='4'></td><td style='text-align:right;font-size:11px;color:var(--gray);font-weight:600;padding:8px 9px'>Subtotal</td><td style='text-align:right;font-weight:700;padding:8px 9px'>"+usd(sub)+"</td></tr>"+
       "<tr style='background:#edf7f0'><td colspan='4'></td><td style='text-align:right;font-size:11px;color:var(--g);font-weight:700;padding:8px 9px'>TOTAL CONTADO</td><td style='text-align:right;font-size:16px;color:var(--g);font-weight:900;padding:8px 9px'>"+usd(sub)+"</td></tr>"+
-      "<tr style='background:#fff3eb'><td colspan='4'></td><td style='text-align:right;font-size:11px;color:var(--o);font-weight:600;padding:8px 9px'>Con tarjeta (+10%)</td><td style='text-align:right;font-size:13px;color:var(--o);font-weight:700;padding:8px 9px'>"+usd(card)+"</td></tr>";
+      "<tr style='background:#fff3eb'><td colspan='4'></td><td style='text-align:right;font-size:11px;color:var(--o);font-weight:600;padding:8px 9px'>Con tarjeta</td><td style='text-align:right;font-size:13px;color:var(--o);font-weight:700;padding:8px 9px'>"+usd(card)+"</td></tr>";
   }
   let ft="IM AGROJARDINERIA - RUC: 0930706742001 - Daule, Guayas - im.agrojardineria@hotmail.com";
   if(pf.vendedor)ft+=" - Vendedor: "+pf.vendedor;
@@ -580,7 +580,7 @@ function buildPDF(pf,cart,sub,card){
   doc.setFontSize(8);doc.setFont("helvetica","bold");doc.setTextColor(...GR);doc.text("TOTAL CONTADO:",W-M-38,y+5.5);
   doc.setFontSize(11);doc.setTextColor(...VE);doc.text(usd(sub),W-M-2,y+5.5,{align:"right"});y+=9;
   doc.setFillColor(255,243,235);doc.rect(W-M-68,y,68,7,"F");
-  doc.setFontSize(8);doc.setFont("helvetica","normal");doc.setTextColor(...GR);doc.text("Con tarjeta (+10%):",W-M-38,y+4.8);
+  doc.setFontSize(8);doc.setFont("helvetica","normal");doc.setTextColor(...GR);doc.text("Con tarjeta:",W-M-38,y+4.8);
   doc.setFont("helvetica","bold");doc.setTextColor(...NA);doc.text(usd(card),W-M-2,y+4.8,{align:"right"});y+=11;
   const sw=(W-M*2-4)/2;
   [[M,"GARANTIA","12 meses de garantia de fabrica.","Hasta 24 meses con aceite IM y mantenimiento."],[M+sw+4,"ENTREGA","Entrega en 24h confirmado el pago.","Cobertura Daule y provincia del Guayas."]].forEach(([x,title,l1,l2])=>{
@@ -615,7 +615,7 @@ function waText(){
   if(pf.ciudad)t+="*Ciudad:* "+pf.ciudad+"\n";
   t+="\n*PRODUCTOS:*\n";
   cart.forEach(i=>{t+="- "+i.qty+"x "+i.name+"  *"+usd(i.pvp*i.qty)+"*\n";});
-  t+="\n*TOTAL CONTADO: "+usd(sub)+"*\nCon tarjeta (+10%): "+usd(card)+"\n\n";
+  t+="\n*TOTAL CONTADO: "+usd(sub)+"*\nCon tarjeta: "+usd(card)+"\n\n";
   t+="Garantia: 12 meses (hasta 24 con mantenimiento IM)\n";
   t+="Entrega: 24h confirmado el pago\n\n";
   t+="Banco Pichincha - Cta. Cte. 2100318752\n";
