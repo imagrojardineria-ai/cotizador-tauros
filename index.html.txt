@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Cotizador IM Agrojardineria - Tauros 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--g:#1a5c2e;--gd:#0f3a1b;--gl:#e8f4ec;--o:#e05a00;--gray:#64748b;--gL:#f1f5f9;--bd:#e2e8f0;--txt:#1e293b}
+html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;background:#edf2ed;color:var(--txt);-webkit-font-smoothing:antialiased}
+#app{max-width:900px;margin:0 auto;min-height:100vh}
+.hdr{background:linear-gradient(135deg,var(--gd),var(--g));padding:13px 14px 0;border-bottom:4px solid var(--o);position:sticky;top:0;z-index:50}
+.hdr-row{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.hico{width:38px;height:38px;background:var(--o);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.hname{font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:#fff;line-height:1.1}
+.hsub{font-size:9px;color:rgba(255,255,255,.5);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+.cpill{margin-left:auto;background:var(--o);color:#fff;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;border:none;white-space:nowrap;display:none}
+.cpill.visible{display:flex;align-items:center;gap:5px}
+.tabs{display:flex}
+.tab{flex:1;padding:9px 2px;border:none;background:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:10px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.5px;text-transform:uppercase;border-bottom:3px solid transparent;transition:all .2s}
+.tab.on{color:var(--o);border-bottom-color:var(--o)}
+.tab:hover:not(.on){color:rgba(255,255,255,.75)}
+.tn{display:inline-flex;align-items:center;justify-content:center;background:var(--o);color:#fff;border-radius:10px;min-width:16px;height:16px;font-size:9px;padding:0 3px;margin-left:3px;vertical-align:middle}
+.main{padding:15px 12px 70px}
+.page{display:none}.page.on{display:block}
+.sh{display:flex;align-items:center;gap:9px;margin-bottom:13px}
+.st{font-family:'Playfair Display',serif;font-size:18px;color:var(--g);font-weight:700}
+.sp{background:var(--gl);color:var(--g);border-radius:20px;padding:3px 9px;font-size:11px;font-weight:700}
+.card{background:#fff;border-radius:10px;box-shadow:0 2px 14px rgba(0,0,0,.07);overflow:hidden;margin-bottom:13px}
+.cb{padding:14px}
+.inp{width:100%;border:1.5px solid var(--bd);border-radius:8px;padding:9px 11px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--txt);background:#fff;transition:border .2s;-webkit-appearance:none}
+.inp:focus{outline:none;border-color:var(--g);box-shadow:0 0 0 3px rgba(26,92,46,.1)}
+.lbl{display:block;font-size:10px;font-weight:700;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.fld{margin-bottom:11px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:10px 15px;border:none;border-radius:8px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;transition:all .15s;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.bg{background:var(--g);color:#fff}.bg:hover{background:var(--gd)}
+.bgh{background:var(--gL);color:var(--txt)}.bgh:hover{background:var(--bd)}
+.bd2{background:#fee2e2;color:#dc2626}.bd2:hover{background:#fecaca}
+.bw{background:#25d366;color:#fff}.bw:hover{background:#1da851}
+.bsm{padding:5px 10px;font-size:12px}
+.brow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.sbar{position:relative;margin-bottom:11px}
+.sbar .inp{padding-left:34px}
+.sico{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--gray);font-size:16px;pointer-events:none}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{padding:4px 11px;border-radius:20px;border:1.5px solid var(--bd);font-size:11px;font-weight:600;cursor:pointer;background:#fff;color:var(--gray);transition:all .15s}
+.chip.on{background:var(--g);color:#fff;border-color:var(--g)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:9px}
+.pc{background:#fff;border:1.5px solid var(--bd);border-radius:10px;padding:10px;cursor:pointer;transition:all .15s;position:relative;display:flex;flex-direction:column;gap:4px}
+.pc:hover{border-color:var(--g);box-shadow:0 4px 14px rgba(26,92,46,.1);transform:translateY(-1px)}
+.pc.inc{border-color:var(--g);background:var(--gl)}
+.pc-cat{font-size:8px;font-weight:800;color:var(--g);letter-spacing:1px;text-transform:uppercase}
+.pc-code{font-size:8px;color:var(--gray);font-family:monospace}
+.pc-name{font-size:11px;font-weight:700;line-height:1.3;flex:1}
+.pc-spec{font-size:9px;color:var(--gray);line-height:1.45}
+.pc-price{font-family:'Playfair Display',serif;font-size:15px;color:var(--g);font-weight:700;margin-top:auto;padding-top:4px}
+.pc-pct{font-size:9px;color:var(--o);font-weight:700;margin-left:3px}
+.pc-btn{margin-top:4px;width:100%;padding:6px;border:none;border-radius:6px;background:var(--g);color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif}
+.pc.inc .pc-btn{background:var(--o)}
+.ibadge{position:absolute;top:7px;right:7px;background:var(--g);color:#fff;border-radius:10px;font-size:9px;font-weight:800;padding:2px 5px}
+.ctbl{width:100%;border-collapse:collapse}
+.ctbl th{background:var(--g);color:#fff;padding:8px 9px;font-size:9px;letter-spacing:1px;text-transform:uppercase;text-align:left;font-weight:700}
+.ctbl td{padding:9px 9px;border-bottom:1px solid var(--bd);font-size:12px;vertical-align:middle}
+.ctbl tr:last-child td{border-bottom:none}
+.ctbl tr:nth-child(even) td{background:#fafafa}
+.qc{display:flex;align-items:center;gap:4px;justify-content:center}
+.qb{width:28px;height:28px;border:1.5px solid var(--bd);border-radius:6px;background:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--g);font-weight:700;transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif}
+.qb:hover{background:var(--g);color:#fff;border-color:var(--g)}
+.qv{min-width:24px;text-align:center;font-weight:700;font-size:14px}
+.tbox{background:var(--gd);border-radius:10px;padding:14px 16px;color:#fff;margin-top:12px}
+.trow{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
+.trow+.trow{border-top:1px solid rgba(255,255,255,.1)}
+.tl{font-size:12px;opacity:.7}.tv{font-size:13px;font-weight:700}
+.trow.tm{border-top:2px solid var(--o)!important;padding-top:9px;margin-top:4px}
+.trow.tm .tl{font-size:14px;opacity:1;font-weight:700}
+.trow.tm .tv{font-family:'Playfair Display',serif;font-size:20px;color:#90ee90}
+.trow.tc .tv{color:#ffa366;font-size:14px}
+.trow.tco .tv{color:#7dd3fc;font-size:12px}
+.vcard{background:linear-gradient(135deg,#f0f9f2,var(--gl));border:2px solid var(--g);border-radius:10px;padding:13px;margin-bottom:13px}
+.vcard-tit{font-size:11px;font-weight:800;color:var(--g);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.sumbar{background:var(--gl);border:1.5px solid var(--g);border-radius:10px;padding:11px 13px;margin-bottom:13px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.sum-l{font-size:11px;color:var(--g);font-weight:700}
+.sum-v{font-family:'Playfair Display',serif;font-size:18px;color:var(--g);font-weight:900}
+.sum-s{font-size:10px;color:var(--gray)}
+.pda{background:var(--gd);border-radius:10px;padding:14px;margin-bottom:14px}
+.pda-t{color:rgba(255,255,255,.65);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.pda-r{display:flex;gap:9px;flex-wrap:wrap}
+.pbtn{background:#fff;color:var(--g);font-size:13px;font-weight:800;padding:12px 16px;border-radius:8px;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s;flex:1;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif}
+.pbtn:hover{background:var(--gl)}.pbtn:active{transform:scale(.97)}.pbtn:disabled{opacity:.5;cursor:not-allowed}
+.wbtn{background:#25d366;color:#fff;font-size:13px;font-weight:800;padding:12px 16px;border-radius:8px;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s;flex:1;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif}
+.wbtn:hover{background:#1da851}.wbtn:active{transform:scale(.97)}.wbtn:disabled{opacity:.5;cursor:not-allowed}
+.pda-note{font-size:10px;color:rgba(255,200,100,.85);margin-top:8px}
+.pda-info{font-size:10px;color:rgba(255,255,255,.4);margin-top:6px}
+.vstrip{background:#fff;border-radius:10px;box-shadow:0 2px 14px rgba(0,0,0,.07);margin-bottom:12px;overflow:hidden}
+.vs-h{background:var(--gl);padding:10px 13px;font-size:12px;font-weight:700;color:var(--g);border-bottom:1px solid var(--bd)}
+.vs-r{display:flex;justify-content:space-between;padding:8px 13px;border-bottom:1px solid var(--bd);font-size:13px}
+.vs-tot{display:flex;justify-content:space-between;padding:10px 13px;background:var(--gl);font-size:14px;font-weight:800;color:var(--g)}
+.vs-card{display:flex;justify-content:space-between;padding:7px 13px;font-size:12px;font-weight:700;color:var(--o)}
+.pfdoc{background:#fff;border-radius:10px;box-shadow:0 2px 14px rgba(0,0,0,.07);overflow:hidden}
+.pf-hdr{background:linear-gradient(135deg,#0f3a1b,#1a5c2e);padding:18px 18px 14px;border-bottom:4px solid #e05a00}
+.pf-htop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap}
+.pf-co{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:#fff}
+.pf-tg{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:3px}
+.pf-rt{text-align:right}
+.pf-dl{font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.45);text-transform:uppercase}
+.pf-dn{font-family:'Playfair Display',serif;font-size:15px;font-weight:900;color:#ffc67a}
+.pf-dd{font-size:9px;color:rgba(255,255,255,.5)}
+.pf-cli{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:13px 16px;border-bottom:1px solid var(--bd);background:#f9fbf9}
+.pf-cf label{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);font-weight:700;display:block;margin-bottom:2px}
+.pf-cf p{font-size:12px;font-weight:700;color:var(--txt)}
+.pf-items-wrap{overflow-x:auto}
+.pf-tbl{width:100%;border-collapse:collapse}
+.pf-tbl thead tr{background:var(--g)}
+.pf-tbl thead th{color:#fff;padding:8px 9px;font-size:10px;letter-spacing:1px;text-transform:uppercase;text-align:left;font-weight:700}
+.pf-tbl tbody tr:nth-child(even) td{background:#f9f7f4}
+.pf-tbl tbody td{padding:8px 9px;font-size:12px;border-bottom:1px solid #eee;color:var(--txt);vertical-align:top}
+.pf-tbl tfoot td{padding:8px 9px;font-weight:700}
+.pf-secs{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:13px 16px}
+.pf-sec{background:#f9f7f4;border-left:3px solid var(--g);border-radius:0 6px 6px 0;padding:10px 12px}
+.pf-sec.full{grid-column:1/-1}
+.pf-sec h5{font-size:9px;font-weight:800;color:var(--g);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
+.pf-sec p,.pf-sec li{font-size:11px;color:#555;line-height:1.75}
+.pf-sec ul{padding-left:13px}
+.pf-pg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pf-ft{background:#1a1a1a;color:rgba(255,255,255,.35);text-align:center;padding:11px;font-size:9px;letter-spacing:.8px}
+.empty{text-align:center;padding:36px 16px;color:var(--gray)}
+.eico{font-size:40px;margin-bottom:8px}
+.etit{font-size:14px;font-weight:700;color:var(--txt);margin-bottom:4px}
+.pfform{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sdiv{grid-column:1/-1;height:1px;background:var(--bd);margin:3px 0}
+.slbl{grid-column:1/-1;font-size:10px;font-weight:800;color:var(--g);letter-spacing:1.5px;text-transform:uppercase;padding-top:3px}
+.full-col{grid-column:1/-1}
+.toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--gd);color:#fff;padding:10px 18px;border-radius:30px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 8px 28px rgba(0,0,0,.2);transition:transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;border-left:4px solid var(--o)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-end;justify-content:center;z-index:100}
+.ov.show{display:flex}
+.modal{background:#fff;border-radius:16px 16px 0 0;padding:20px 15px 32px;width:100%;max-width:540px;max-height:80vh;overflow-y:auto;animation:su .25s ease}
+@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.mo-t{font-family:'Playfair Display',serif;font-size:18px;color:var(--g);margin-bottom:12px}
+.wa-pre{font-family:monospace;font-size:12px;white-space:pre-wrap;background:#f0f9f4;border-radius:8px;padding:12px;max-height:260px;overflow-y:auto;line-height:1.7;color:#222;border:1.5px solid var(--gl)}
+@media(max-width:500px){
+  .pgrid{grid-template-columns:1fr 1fr}
+  .pfform,.g2{grid-template-columns:1fr}
+  .pf-cli{grid-template-columns:1fr 1fr}
+  .pf-secs,.pf-pg{grid-template-columns:1fr}
+  .pda-r{flex-direction:column}
+  .pf-htop{flex-direction:column}
+  .pf-rt{text-align:left}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="hdr">
+    <div class="hdr-row">
+      <div class="hico">&#127807;</div>
+      <div>
+        <div class="hname">IM Agrojardineria</div>
+        <div class="hsub">Distribuidor Tauros &middot; Daule</div>
+      </div>
+      <button class="cpill" id="cart-pill" onclick="goTab('carrito')">&#128722; <span id="pill-txt">0</span></button>
+    </div>
+    <nav class="tabs">
+      <button class="tab on" data-tab="catalogo" onclick="goTab('catalogo')">Catalogo</button>
+      <button class="tab" data-tab="carrito" onclick="goTab('carrito')">Carrito <span class="tn" id="cart-badge" style="display:none">0</span></button>
+      <button class="tab" data-tab="datos" onclick="goTab('datos')">Datos</button>
+      <button class="tab" data-tab="preview" onclick="goTab('preview')">Proforma</button>
+    </nav>
+  </header>
+  <div class="main">
+    <div class="page on" id="page-catalogo">
+      <div class="sh"><span class="st">Catalogo Tauros 2026</span><span class="sp" id="prod-count">39 productos</span></div>
+      <div class="sbar"><span class="sico">&#128269;</span><input class="inp" id="search-inp" placeholder="Buscar codigo o nombre..." oninput="filterProducts()"/></div>
+      <div class="chips" id="cat-chips"></div>
+      <div class="pgrid" id="prod-grid"></div>
+    </div>
+    <div class="page" id="page-carrito">
+      <div class="sh"><span class="st">Carrito</span><span class="sp" id="cart-count-label" style="display:none"></span></div>
+      <div id="cart-empty" class="empty">
+        <div class="eico">&#128722;</div>
+        <div class="etit">Carrito vacio</div>
+        <p style="font-size:13px">Agrega productos desde el Catalogo</p>
+        <button class="btn bg" style="margin-top:14px" onclick="goTab('catalogo')">Ir al Catalogo</button>
+      </div>
+      <div id="cart-filled" style="display:none">
+        <div class="card" style="overflow:auto">
+          <table class="ctbl">
+            <thead><tr>
+              <th>Producto</th><th style="text-align:center">Cant.</th>
+              <th style="text-align:right">Precio</th><th style="text-align:right">Subtotal</th><th></th>
+            </tr></thead>
+            <tbody id="cart-tbody"></tbody>
+          </table>
+        </div>
+        <div class="tbox">
+          <div class="trow"><span class="tl">Subtotal</span><span class="tv" id="t-sub"></span></div>
+          <div class="trow tm"><span class="tl">TOTAL CONTADO</span><span class="tv" id="t-contado"></span></div>
+          <div class="trow tc"><span class="tl">Con tarjeta (+10%)</span><span class="tv" id="t-tarjeta"></span></div>
+          <div class="trow tco"><span class="tl">Comision estimada</span><span class="tv" id="t-comision"></span></div>
+        </div>
+        <div class="brow">
+          <button class="btn bg" onclick="goTab('datos')">Datos del cliente &rarr;</button>
+          <button class="btn bgh" onclick="clearCart()">Vaciar</button>
+        </div>
+      </div>
+    </div>
+    <div class="page" id="page-datos">
+      <div class="sh"><span class="st">Datos de la Proforma</span></div>
+      <div class="sumbar" id="datos-sumbar" style="display:none">
+        <div>
+          <div class="sum-l">Total cotizacion</div>
+          <div class="sum-v" id="datos-total"></div>
+          <div class="sum-s" id="datos-sub"></div>
+        </div>
+        <button class="btn bsm bg" onclick="goTab('carrito')">Ver carrito</button>
+      </div>
+      <div class="vcard">
+        <div class="vcard-tit">Datos del Vendedor</div>
+        <div class="g2">
+          <div class="fld"><label class="lbl">Nombre</label><input class="inp" id="f-vendedor" placeholder="Tu nombre completo" oninput="syncPF()"/></div>
+          <div class="fld"><label class="lbl">Tu numero WhatsApp</label><input class="inp" id="f-wa" placeholder="593987654321" oninput="syncPF()"/></div>
+        </div>
+      </div>
+      <div class="card"><div class="cb">
+        <div class="pfform">
+          <div class="slbl">Documento</div>
+          <div class="fld"><label class="lbl">N Proforma</label><input class="inp" id="f-numero" oninput="syncPF()"/></div>
+          <div class="fld"><label class="lbl">Fecha</label><input class="inp" id="f-fecha" oninput="syncPF()"/></div>
+          <div class="sdiv"></div>
+          <div class="slbl">Cliente</div>
+          <div class="fld"><label class="lbl">Nombre del cliente</label><input class="inp" id="f-cliente" placeholder="Nombre completo" oninput="syncPF()"/></div>
+          <div class="fld"><label class="lbl">RUC / Cedula</label><input class="inp" id="f-ruc" placeholder="0930000000001" oninput="syncPF()"/></div>
+          <div class="fld"><label class="lbl">Telefono / WhatsApp</label><input class="inp" id="f-telefono" placeholder="0991234567" oninput="syncPF()"/></div>
+          <div class="fld"><label class="lbl">Empresa / Finca</label><input class="inp" id="f-empresa" oninput="syncPF()"/></div>
+          <div class="fld full-col"><label class="lbl">Ciudad</label><input class="inp" id="f-ciudad" placeholder="Daule, Guayaquil..." oninput="syncPF()"/></div>
+        </div>
+      </div></div>
+      <div class="brow">
+        <button class="btn bg" onclick="goTab('preview')">Ver Proforma &rarr;</button>
+        <button class="btn bgh" onclick="goTab('carrito')">&larr; Carrito</button>
+      </div>
+    </div>
+    <div class="page" id="page-preview">
+      <div class="sh"><span class="st">Proforma</span></div>
+      <div class="vstrip" id="verify-strip" style="display:none">
+        <div class="vs-h">Verifica antes de generar</div>
+        <div id="verify-rows"></div>
+        <div class="vs-tot"><span>TOTAL CONTADO</span><span id="v-total"></span></div>
+        <div class="vs-card"><span>Con tarjeta (+10%)</span><span id="v-card"></span></div>
+      </div>
+      <div class="pda">
+        <div class="pda-t">Generar y compartir</div>
+        <div class="pda-r">
+          <button class="pbtn" id="pdf-btn" onclick="handlePDF()">Descargar PDF</button>
+          <button class="wbtn" id="wa-btn" onclick="openWA()">Enviar WhatsApp</button>
+          <button class="btn bgh bsm" onclick="document.getElementById('wa-modal').classList.add('show')">Ver texto</button>
+        </div>
+        <div class="pda-note" id="wa-warn">Ingresa tu numero WA en Datos para personalizar el envio</div>
+        <div class="pda-info" id="wa-info" style="display:none"></div>
+      </div>
+      <div style="margin-bottom:12px">
+        <button class="btn bgh bsm" onclick="goTab('datos')">&larr; Editar datos</button>
+      </div>
+      <div class="pfdoc">
+        <div class="pf-hdr">
+          <div class="pf-htop">
+            <div><div class="pf-co">IM Agrojardineria</div><div class="pf-tg">Distribuidor Autorizado &middot; Maquinaria Agricola Tauros &middot; Daule, Ecuador</div></div>
+            <div class="pf-rt">
+              <div class="pf-dl">Proforma Comercial</div>
+              <div class="pf-dn" id="pv-numero"></div>
+              <div class="pf-dd" id="pv-fecha"></div>
+            </div>
+          </div>
+        </div>
+        <div class="pf-cli">
+          <div class="pf-cf"><label>Cliente</label><p id="pv-cliente">-</p></div>
+          <div class="pf-cf"><label>RUC / CI</label><p id="pv-ruc">-</p></div>
+          <div class="pf-cf"><label>Telefono</label><p id="pv-telefono">-</p></div>
+          <div class="pf-cf"><label>Empresa</label><p id="pv-empresa">-</p></div>
+          <div class="pf-cf"><label>Ciudad</label><p id="pv-ciudad">-</p></div>
+          <div class="pf-cf"><label>Vendedor</label><p id="pv-vendedor">-</p></div>
+        </div>
+        <div class="pf-items-wrap">
+          <div class="empty" id="pv-empty" style="padding:24px 0">
+            <div class="eico">&#128205;</div>
+            <div class="etit">Sin productos en el carrito</div>
+            <button class="btn bg bsm" style="margin-top:10px" onclick="goTab('catalogo')">Ir al Catalogo</button>
+          </div>
+          <table class="pf-tbl" id="pv-table" style="display:none">
+            <thead><tr>
+              <th style="width:28px">#</th><th>Codigo</th><th>Producto</th>
+              <th style="text-align:right">P.Unit</th><th style="text-align:center">Cant</th><th style="text-align:right">Subtotal</th>
+            </tr></thead>
+            <tbody id="pv-tbody"></tbody>
+            <tfoot id="pv-tfoot"></tfoot>
+          </table>
+        </div>
+        <div class="pf-secs">
+          <div class="pf-sec"><h5>Garantia</h5><ul><li>12 meses de garantia de fabrica.</li><li>Hasta 24 meses con aceite IM y mantenimiento en nuestro taller.</li></ul></div>
+          <div class="pf-sec"><h5>Entrega</h5><p>Entrega en 24h confirmado el pago. Cobertura Daule y provincia del Guayas.</p></div>
+          <div class="pf-sec full"><h5>Forma de Pago</h5>
+            <div class="pf-pg">
+              <div><p><strong>Banco Pichincha</strong></p><p>Cta. Corriente: <strong>2100318752</strong></p><p>Luis Alberto Pazmino Quevedo &middot; CI: 0930706742</p></div>
+              <div><p>Enviar comprobante:</p><p><strong>im.agrojardineria@hotmail.com</strong></p><p style="margin-top:5px">Validez: <strong>8 dias calendario</strong></p></div>
+            </div>
+          </div>
+        </div>
+        <div class="pf-ft" id="pv-footer">IM AGROJARDINERIA &middot; RUC: 0930706742001 &middot; Daule, Guayas &middot; im.agrojardineria@hotmail.com</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="ov" id="wa-modal" onclick="this.classList.remove('show')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="mo-t">Vista previa WhatsApp</div>
+    <div class="wa-pre" id="wa-pre-txt"></div>
+    <div class="brow" style="margin-top:12px">
+      <button class="btn bw" onclick="openWA()">Abrir WhatsApp</button>
+      <button class="btn bg" onclick="copyWA()">Copiar texto</button>
+      <button class="btn bgh" onclick="document.getElementById('wa-modal').classList.remove('show')">Cerrar</button>
+    </div>
+  </div>
+</div>
+<script>
+const PRODUCTS=[
+{code:"PTJ",name:"Fumigadora Manual Profesional PTJ",cat:"Fumigadora Manual",pvp:60,com:9,pct:15,specs:"20L - 80 PSI - bomba piston laton - manguera 165 cm"},
+{code:"FUM-0003",name:"Fumigadora Manual Tauros 20L",cat:"Fumigadora Manual",pvp:20,com:3,pct:15,specs:"20L - 43 PSI - bomba PP - barra en L larga"},
+{code:"FUM-0004",name:"Fumigadora Manual Reforzada Tauros 20L",cat:"Fumigadora Manual",pvp:35,com:5.25,pct:15,specs:"20L - boquillas simple/doble/4 huecos - 43 PSI"},
+{code:"HT-16M",name:"Fumigadora Manual Reforzada Tauros 16L",cat:"Fumigadora Manual",pvp:25,com:3.75,pct:15,specs:"16L - boquilla simple/doble/4 huecos - 43 PSI"},
+{code:"PA05",name:"Bomba Manual Fumigadora 2 Litros",cat:"Fumigadora Manual",pvp:4,com:0.60,pct:15,specs:"2L - presentacion interna 1 unidad"},
+{code:"FUM-0006",name:"Fumigadora a Bateria Premium 20L",cat:"Fumigadora Bateria",pvp:70,com:10.50,pct:15,specs:"20L - 12V-12A - 8 lpm 150 psi - 8 huecos"},
+{code:"HT-BH20F",name:"Fumigadora a Bateria Tauros 20L",cat:"Fumigadora Bateria",pvp:55,com:8.25,pct:15,specs:"20L - 12V8Ah - 3.1 lpm - lanza metalica ajustable"},
+{code:"HT-BH16F",name:"Fumigadora a Bateria Tauros 16L",cat:"Fumigadora Bateria",pvp:45,com:6.75,pct:15,specs:"16L - 12V8Ah - 3.1 lpm - cargador 1.0 A"},
+{code:"HT-BH20F-EX",name:"Fumigadora Bateria Extraible con Mezclador 20L",cat:"Fumigadora Bateria",pvp:60,com:9,pct:15,specs:"20L - 12V-8A - 4 lpm 100 psi - lanza ajustable"},
+{code:"CT-420",name:"Fumigadora a Motor CT-420 Tauros",cat:"Fumigadora Motor",pvp:320,com:48,pct:15,specs:"56.5 cc - 2.6 kW - tanque 20L - 1300 M3/H"},
+{code:"ST-420",name:"Fumigadora a Motor ST-420 Tauros",cat:"Fumigadora Motor",pvp:300,com:45,pct:15,specs:"56.5 cc - 2.6 kW - tanque 14L - 1300 M3/H"},
+{code:"QL-900",name:"Fumigadora a Motor QL-900",cat:"Fumigadora Motor",pvp:115,com:17.25,pct:15,specs:"25.6 cc - 1.2 HP - tanque 25L - 15-25 Kg/cm2"},
+{code:"QL-769",name:"Fumigadora a Motor QL-769",cat:"Fumigadora Motor",pvp:125,com:18.75,pct:15,specs:"25.6 cc - 1.2 HP - tanque 15L - flujo 8L/min"},
+{code:"CG520",name:"Moto Guadana CG520",cat:"Moto Guadana",pvp:150,com:30,pct:20,specs:"2.0 HP - 7500 RPM - 52 cc - poste 28 mm"},
+{code:"T143II",name:"Moto Guadana T143II",cat:"Moto Guadana",pvp:260,com:52,pct:20,specs:"2.0 HP - 7500 RPM - 41.5 cc - carburador Walbro - bujia NGK"},
+{code:"T541RS",name:"Moto Guadana T541RS",cat:"Moto Guadana",pvp:270,com:54,pct:20,specs:"2.0 HP - 7500 RPM - 41.5 cc - poste 28 mm 2.5 mm espesor"},
+{code:"T553RS",name:"Moto Guadana T553RS",cat:"Moto Guadana",pvp:350,com:70,pct:20,specs:"3.0 HP - 9000 RPM - 50.6 cc - refrigerado por aire"},
+{code:"M143II",name:"Moto Guadana Multifuncional M143II",cat:"Moto Guadana",pvp:350,com:70,pct:20,specs:"2.0 HP - 7500 RPM - 41.5 cc - poste 28 mm"},
+{code:"TAG143",name:"Ahoyadora Manual TAG143",cat:"Ahoyadora",pvp:240,com:36,pct:15,specs:"2.0 HP - 7500 RPM - 41.5 cc - broca 200 mm"},
+{code:"JL-168F",name:"Motor Estacionario 6.5 HP JL-168F",cat:"Motor Estacionario",pvp:350,com:52.50,pct:15,specs:"6.5 HP - 196 ml - 4.8 kW / 4000 RPM"},
+{code:"CF1125M",name:"Motor Diesel Changfa CF1125M 28 HP",cat:"Motor Diesel",pvp:1650,com:165,pct:10,specs:"28 HP - 2200 RPM - 4T - 1.473 L - arranque electrico"},
+{code:"CF1115NM",name:"Motor Diesel Changfa CF1115NM",cat:"Motor Diesel",pvp:1550,com:155,pct:10,specs:"14.71 kW - 1.195 L - refrigeracion por agua"},
+{code:"CF1100N",name:"Motor Diesel Changfa CF1100N 16 HP",cat:"Motor Diesel",pvp:1050,com:105,pct:10,specs:"16 HP - 2200 RPM - 4T - 1.093 L - arranque manual"},
+{code:"JL30TPDG-2",name:"Bomba Estacionaria 6.5 HP + Manguera 100m",cat:"Moto Bomba",pvp:320,com:48,pct:15,specs:"6.5 HP - 196 ml - 4.8 kW / 4000 RPM"},
+{code:"3WH-11A",name:"Bomba Semiestacionaria 4T 2HP 3WH-11A",cat:"Moto Bomba",pvp:180,com:27,pct:15,specs:"4T - 1.0 kW / 7000 RPM - 35.8 cc - 630 ml"},
+{code:"QL-20i",name:"Moto Bomba Gasolina QL-20i 7HP",cat:"Moto Bomba",pvp:230,com:34.50,pct:15,specs:"7 HP - 2 pulgadas - 20 m3/h - altura 63 m"},
+{code:"BT-143RII",name:"Motobomba BT-143RII",cat:"Moto Bomba",pvp:200,com:30,pct:15,specs:"2T - 41.5 cc - 1.5 kW / 2.0 CV - 7500 rpm"},
+{code:"A036",name:"Sembradora Manual A036",cat:"Sembradora",pvp:120,com:18,pct:15,specs:"Boquillas 12/10/9/8/7/6 - espaciado 13-25 cm - 2-3 kg"},
+{code:"A004",name:"Sembradora Fertilizadora SU-A004",cat:"Sembradora",pvp:30,com:4.50,pct:15,specs:"Maiz/Soya/Mani - semillas 1.5-2 kg - fertilizante 1.5-2 kg"},
+{code:"A006",name:"Sembradora SU-A006",cat:"Sembradora",pvp:25,com:3.75,pct:15,specs:"Capacidad 1.5-2 kg - peso 2.5 kg"},
+{code:"SCPT-014",name:"Serrucho 14in Curvo con Gancho",cat:"Herramienta Poda",pvp:10,com:1.50,pct:15,specs:"14 pulgadas - curvo - gancho - mango comfort"},
+{code:"ST-214",name:"Serrucho 14in Mango Plastico",cat:"Herramienta Poda",pvp:5,com:0.75,pct:15,specs:"14 pulgadas - curvo - mango plastico"},
+{code:"TTPC-027",name:"Tijera 2 Manos Tubular 680mm",cat:"Herramienta Poda",pvp:15,com:2.25,pct:15,specs:"Tubular - pico corto - 680 mm"},
+{code:"TPT-812",name:"Tijera Tauros 8.5in para Podar",cat:"Herramienta Poda",pvp:5,com:0.75,pct:15,specs:"8.5 pulgadas"},
+{code:"TPF-812",name:"Tijera Tauros 8.5in Forjada",cat:"Herramienta Poda",pvp:5,com:0.75,pct:15,specs:"8.5 pulgadas - forjada"},
+{code:"TPTR-009",name:"Tijera Tauros 9in Amarilla",cat:"Herramienta Poda",pvp:5,com:0.75,pct:15,specs:"9 pulgadas - amarilla"},
+{code:"TTRA-014",name:"Tijera Ramas Altas 14in SK5",cat:"Herramienta Poda",pvp:25,com:3.75,pct:15,specs:"14 pulgadas - SK5 - sin cabo"},
+{code:"TPTT-70102",name:"Tijera Telescopica Curva 70-102 cm",cat:"Herramienta Poda",pvp:30,com:4.50,pct:15,specs:"Curva - telescopica - 70-102 cm"},
+{code:"TPTT-68101",name:"Tijera Telescopica Recta 68-101 cm",cat:"Herramienta Poda",pvp:30,com:4.50,pct:15,specs:"Recta - telescopica - 68-101 cm"}
+];
+const CATS=["Todas",...new Set(PRODUCTS.map(p=>p.cat))];
+const usd=n=>"$"+Number(n).toFixed(2);
+const todayStr=()=>new Date().toLocaleDateString("es-EC",{day:"2-digit",month:"2-digit",year:"numeric"});
+const newNum=()=>"PRO-"+new Date().getFullYear()+"-"+String(Math.floor(Math.random()*900)+100);
+let cart=[];
+let catFilter="Todas";
+let pf={numero:newNum(),fecha:todayStr(),cliente:"",ruc:"",telefono:"",empresa:"",ciudad:"",vendedor:"Luis Pazmino Q.",waVendedor:""};
+window.onload=function(){
+  document.getElementById("f-numero").value=pf.numero;
+  document.getElementById("f-fecha").value=pf.fecha;
+  document.getElementById("f-vendedor").value=pf.vendedor;
+  buildCatChips();renderProducts();
+};
+function goTab(t){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("on"));
+  document.querySelectorAll(".tab").forEach(b=>b.classList.remove("on"));
+  document.getElementById("page-"+t).classList.add("on");
+  document.querySelector('[data-tab="'+t+'"]').classList.add("on");
+  if(t==="carrito")renderCart();
+  if(t==="preview")renderPreview();
+  if(t==="datos")renderDatosSumbar();
+  window.scrollTo(0,0);
+}
+function buildCatChips(){
+  const el=document.getElementById("cat-chips");
+  el.innerHTML=CATS.map(c=>'<button class="chip'+(c===catFilter?" on":"")+'" onclick="setCat(\''+c+'\')">'+c+"</button>").join("");
+}
+function setCat(c){catFilter=c;buildCatChips();filterProducts();}
+function filterProducts(){
+  const q=document.getElementById("search-inp").value.toLowerCase();
+  const list=PRODUCTS.filter(p=>{
+    const mc=catFilter==="Todas"||p.cat===catFilter;
+    const ms=!q||p.code.toLowerCase().includes(q)||p.name.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q);
+    return mc&&ms;
+  });
+  document.getElementById("prod-count").textContent=list.length+" productos";
+  renderProducts(list);
+}
+function renderProducts(list){
+  list=list||PRODUCTS;
+  const grid=document.getElementById("prod-grid");
+  grid.innerHTML=list.map(p=>{
+    const inc=cart.find(i=>i.code===p.code);
+    return'<div class="pc'+(inc?" inc":"")+'" id="pc-'+p.code+'">'+(inc?'<div class="ibadge">x'+inc.qty+"</div>":"")+
+    '<div class="pc-cat">'+p.cat+'</div><div class="pc-code">'+p.code+'</div><div class="pc-name">'+p.name+'</div>'+
+    '<div class="pc-spec">'+p.specs+'</div><div class="pc-price">'+usd(p.pvp)+'<span class="pc-pct">+'+p.pct+'%</span></div>'+
+    '<button class="pc-btn" onclick="addToCart(\''+p.code+'\')">'+(inc?"+ Agregar otro":"+ Agregar")+"</button></div>";
+  }).join("");
+}
+function addToCart(code){
+  const p=PRODUCTS.find(x=>x.code===code);
+  const ex=cart.find(i=>i.code===code);
+  if(ex)ex.qty++;
+  else cart.push({...p,qty:1});
+  updateCartBadge();filterProducts();
+  showToast("Agregado: "+p.name.substring(0,26));
+}
+function totals(){
+  const sub=cart.reduce((s,i)=>s+i.pvp*i.qty,0);
+  const card=sub*1.10;
+  const comm=cart.reduce((s,i)=>s+i.com*i.qty,0);
+  const items=cart.reduce((s,i)=>s+i.qty,0);
+  return{sub,card,comm,items};
+}
+function updateCartBadge(){
+  const{items,sub}=totals();
+  const badge=document.getElementById("cart-badge");
+  const pill=document.getElementById("cart-pill");
+  if(items>0){
+    badge.textContent=items;badge.style.display="inline-flex";
+    pill.classList.add("visible");
+    document.getElementById("pill-txt").textContent=items+" - "+usd(sub);
+  }else{badge.style.display="none";pill.classList.remove("visible");}
+}
+function renderCart(){
+  const{sub,card,comm,items}=totals();
+  const lbl=document.getElementById("cart-count-label");
+  lbl.textContent=items+" art.";lbl.style.display=items?"":"none";
+  if(!cart.length){
+    document.getElementById("cart-empty").style.display="block";
+    document.getElementById("cart-filled").style.display="none";return;
+  }
+  document.getElementById("cart-empty").style.display="none";
+  document.getElementById("cart-filled").style.display="block";
+  document.getElementById("cart-tbody").innerHTML=cart.map((it,i)=>
+    "<tr><td><div style='font-weight:700;font-size:12px'>"+it.name+"</div><div style='font-size:9px;color:var(--gray);font-family:monospace'>"+it.code+"</div></td>"+
+    "<td><div class='qc'><button class='qb' onclick='changeQty(\""+it.code+"\",-1)'>-</button><span class='qv'>"+it.qty+"</span><button class='qb' onclick='changeQty(\""+it.code+"\",1)'>+</button></div></td>"+
+    "<td style='text-align:right'>"+usd(it.pvp)+"</td>"+
+    "<td style='text-align:right;font-weight:700;color:var(--g)'>"+usd(it.pvp*it.qty)+"</td>"+
+    "<td style='text-align:right'><button class='btn bsm bd2' onclick='removeFromCart(\""+it.code+"\")'>X</button></td></tr>"
+  ).join("");
+  document.getElementById("t-sub").textContent=usd(sub);
+  document.getElementById("t-contado").textContent=usd(sub);
+  document.getElementById("t-tarjeta").textContent=usd(card);
+  document.getElementById("t-comision").textContent=usd(comm);
+}
+function changeQty(code,d){const it=cart.find(i=>i.code===code);if(!it)return;it.qty=Math.max(1,it.qty+d);renderCart();updateCartBadge();}
+function removeFromCart(code){cart=cart.filter(i=>i.code!==code);renderCart();updateCartBadge();filterProducts();}
+function clearCart(){cart=[];renderCart();updateCartBadge();filterProducts();}
+function syncPF(){
+  pf.numero=document.getElementById("f-numero").value;
+  pf.fecha=document.getElementById("f-fecha").value;
+  pf.vendedor=document.getElementById("f-vendedor").value;
+  pf.waVendedor=document.getElementById("f-wa").value;
+  pf.cliente=document.getElementById("f-cliente").value;
+  pf.ruc=document.getElementById("f-ruc").value;
+  pf.telefono=document.getElementById("f-telefono").value;
+  pf.empresa=document.getElementById("f-empresa").value;
+  pf.ciudad=document.getElementById("f-ciudad").value;
+}
+function renderDatosSumbar(){
+  syncPF();const{sub,card,items}=totals();
+  const bar=document.getElementById("datos-sumbar");
+  if(items>0){bar.style.display="flex";document.getElementById("datos-total").textContent=usd(sub);document.getElementById("datos-sub").textContent=items+" art. - tarjeta "+usd(card);}
+  else bar.style.display="none";
+}
+function renderPreview(){
+  syncPF();const{sub,card,items}=totals();
+  ["numero","fecha","cliente","ruc","telefono","empresa","ciudad","vendedor"].forEach(k=>{const el=document.getElementById("pv-"+k);if(el)el.textContent=pf[k]||"-";});
+  const warn=document.getElementById("wa-warn");const info=document.getElementById("wa-info");
+  if(pf.waVendedor){warn.style.display="none";info.style.display="block";info.textContent="WA vendedor: "+pf.waVendedor;}
+  else{warn.style.display="block";info.style.display="none";}
+  const strip=document.getElementById("verify-strip");
+  if(items>0){
+    strip.style.display="block";
+    document.getElementById("verify-rows").innerHTML=cart.map(it=>"<div class='vs-r'><span><strong>"+it.qty+"x</strong> "+it.name+"</span><span style='font-weight:700;color:var(--g)'>"+usd(it.pvp*it.qty)+"</span></div>").join("");
+    document.getElementById("v-total").textContent=usd(sub);
+    document.getElementById("v-card").textContent=usd(card);
+  }else strip.style.display="none";
+  if(!cart.length){
+    document.getElementById("pv-empty").style.display="block";
+    document.getElementById("pv-table").style.display="none";
+  }else{
+    document.getElementById("pv-empty").style.display="none";
+    document.getElementById("pv-table").style.display="table";
+    document.getElementById("pv-tbody").innerHTML=cart.map((it,i)=>
+      "<tr style='background:"+(i%2?"#f9f7f4":"#fff")+"'>"+
+      "<td style='color:var(--gray);font-size:11px'>"+(i+1)+"</td>"+
+      "<td style='font-size:9px;color:var(--gray);font-family:monospace'>"+it.code+"</td>"+
+      "<td style='font-weight:700'>"+it.name+"</td>"+
+      "<td style='text-align:right'>"+usd(it.pvp)+"</td>"+
+      "<td style='text-align:center;font-weight:700'>"+it.qty+"</td>"+
+      "<td style='text-align:right;font-weight:700;color:var(--g)'>"+usd(it.pvp*it.qty)+"</td></tr>"
+    ).join("");
+    document.getElementById("pv-tfoot").innerHTML=
+      "<tr><td colspan='4'></td><td style='text-align:right;font-size:11px;color:var(--gray);font-weight:600;padding:8px 9px'>Subtotal</td><td style='text-align:right;font-weight:700;padding:8px 9px'>"+usd(sub)+"</td></tr>"+
+      "<tr style='background:#edf7f0'><td colspan='4'></td><td style='text-align:right;font-size:11px;color:var(--g);font-weight:700;padding:8px 9px'>TOTAL CONTADO</td><td style='text-align:right;font-size:16px;color:var(--g);font-weight:900;padding:8px 9px'>"+usd(sub)+"</td></tr>"+
+      "<tr style='background:#fff3eb'><td colspan='4'></td><td style='text-align:right;font-size:11px;color:var(--o);font-weight:600;padding:8px 9px'>Con tarjeta (+10%)</td><td style='text-align:right;font-size:13px;color:var(--o);font-weight:700;padding:8px 9px'>"+usd(card)+"</td></tr>";
+  }
+  let ft="IM AGROJARDINERIA - RUC: 0930706742001 - Daule, Guayas - im.agrojardineria@hotmail.com";
+  if(pf.vendedor)ft+=" - Vendedor: "+pf.vendedor;
+  if(pf.waVendedor)ft+=" - WA: "+pf.waVendedor;
+  document.getElementById("pv-footer").textContent=ft;
+  document.getElementById("wa-pre-txt").textContent=waText();
+}
+function handlePDF(){
+  if(!cart.length){showToast("Agrega productos primero");return;}
+  if(!window.jspdf){showToast("Libreria PDF no cargada, revisa tu conexion");return;}
+  try{const{sub,card}=totals();buildPDF(pf,cart,sub,card);showToast("PDF descargado correctamente");}
+  catch(e){showToast("Error: "+e.message);}
+}
+function buildPDF(pf,cart,sub,card){
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:"mm",format:"a4"});
+  const W=210,M=14,VE=[15,58,27],NA=[224,90,0],GR=[100,116,139];
+  doc.setFillColor(...VE);doc.rect(0,0,W,38,"F");
+  doc.setFillColor(...NA);doc.rect(0,38,W,3,"F");
+  doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(20);
+  doc.text("IM Agrojardineria",M,15);
+  doc.setFontSize(8);doc.setFont("helvetica","normal");doc.setTextColor(200,230,210);
+  doc.text("DISTRIBUIDOR AUTORIZADO - MAQUINARIA AGRICOLA TAUROS - DAULE, ECUADOR",M,22);
+  doc.setFont("helvetica","bold");doc.setFontSize(8);doc.setTextColor(180,200,185);
+  doc.text("PROFORMA COMERCIAL",W-M,12,{align:"right"});
+  doc.setFontSize(15);doc.setTextColor(255,200,100);
+  doc.text(pf.numero,W-M,21,{align:"right"});
+  doc.setFontSize(8);doc.setFont("helvetica","normal");doc.setTextColor(180,200,185);
+  doc.text("Fecha: "+pf.fecha,W-M,27,{align:"right"});
+  if(pf.vendedor)doc.text("Vendedor: "+pf.vendedor,W-M,33,{align:"right"});
+  let y=46;
+  doc.setFillColor(240,247,242);doc.rect(M,y,W-M*2,28,"F");
+  doc.setDrawColor(200,225,208);doc.rect(M,y,W-M*2,28);
+  const cw=(W-M*2)/3;
+  [["Cliente",pf.cliente||"-"],["RUC/CI",pf.ruc||"-"],["Telefono",pf.telefono||"-"],["Empresa",pf.empresa||"-"],["Ciudad",pf.ciudad||"-"]].forEach(([l,v],i)=>{
+    const col=i%3,row=Math.floor(i/3),cx=M+col*cw+4,cy=y+6+row*14;
+    doc.setFontSize(7);doc.setFont("helvetica","bold");doc.setTextColor(...GR);doc.text(l.toUpperCase(),cx,cy);
+    doc.setFontSize(9);doc.setFont("helvetica","bold");doc.setTextColor(30,41,59);doc.text(String(v).substring(0,30),cx,cy+5);
+  });
+  y+=33;
+  doc.setFillColor(...VE);doc.rect(M,y,W-M*2,7,"F");
+  doc.setTextColor(255,255,255);doc.setFontSize(7.5);doc.setFont("helvetica","bold");
+  [[M+2,"#"],[M+9,"CODIGO"],[M+30,"PRODUCTO"],[M+105,"P.UNIT"],[M+127,"CANT"],[M+142,"SUBTOTAL"]].forEach(([x,l])=>doc.text(l,x,y+5));
+  y+=7;
+  cart.forEach((it,idx)=>{
+    if(idx%2===1){doc.setFillColor(249,247,244);doc.rect(M,y,W-M*2,8,"F");}
+    doc.setDrawColor(225,225,225);doc.rect(M,y,W-M*2,8);
+    doc.setFontSize(7);doc.setTextColor(...GR);doc.text(String(idx+1),M+4,y+5.5);
+    doc.setFontSize(7);doc.setTextColor(130,140,150);doc.text(it.code,M+9,y+5.5);
+    doc.setFontSize(8);doc.setFont("helvetica","bold");doc.setTextColor(30,41,59);
+    doc.text(it.name.length>36?it.name.substring(0,35)+"...":it.name,M+30,y+5.5);
+    doc.setFont("helvetica","normal");doc.setFontSize(8);
+    doc.text(usd(it.pvp),M+105,y+5.5);doc.text(String(it.qty),M+133,y+5.5,{align:"center"});
+    doc.setFont("helvetica","bold");doc.setTextColor(...VE);
+    doc.text(usd(it.pvp*it.qty),W-M-2,y+5.5,{align:"right"});
+    doc.setFont("helvetica","normal");doc.setTextColor(30,41,59);y+=8;
+  });
+  y+=3;
+  doc.setFillColor(232,244,236);doc.rect(W-M-68,y,68,8,"F");
+  doc.setDrawColor(...VE);doc.rect(W-M-68,y,68,8);
+  doc.setFontSize(8);doc.setFont("helvetica","bold");doc.setTextColor(...GR);doc.text("TOTAL CONTADO:",W-M-38,y+5.5);
+  doc.setFontSize(11);doc.setTextColor(...VE);doc.text(usd(sub),W-M-2,y+5.5,{align:"right"});y+=9;
+  doc.setFillColor(255,243,235);doc.rect(W-M-68,y,68,7,"F");
+  doc.setFontSize(8);doc.setFont("helvetica","normal");doc.setTextColor(...GR);doc.text("Con tarjeta (+10%):",W-M-38,y+4.8);
+  doc.setFont("helvetica","bold");doc.setTextColor(...NA);doc.text(usd(card),W-M-2,y+4.8,{align:"right"});y+=11;
+  const sw=(W-M*2-4)/2;
+  [[M,"GARANTIA","12 meses de garantia de fabrica.","Hasta 24 meses con aceite IM y mantenimiento."],[M+sw+4,"ENTREGA","Entrega en 24h confirmado el pago.","Cobertura Daule y provincia del Guayas."]].forEach(([x,title,l1,l2])=>{
+    doc.setFillColor(249,247,244);doc.rect(x,y,sw,28,"F");doc.setFillColor(...VE);doc.rect(x,y,2,28,"F");
+    doc.setFontSize(7.5);doc.setFont("helvetica","bold");doc.setTextColor(...VE);doc.text(title,x+5,y+6);
+    doc.setFont("helvetica","normal");doc.setFontSize(7.5);doc.setTextColor(80,90,90);
+    doc.text("- "+l1,x+5,y+12);doc.text("- "+l2,x+5,y+18);
+  });
+  y+=32;
+  doc.setFillColor(249,247,244);doc.rect(M,y,W-M*2,28,"F");doc.setFillColor(...VE);doc.rect(M,y,2,28,"F");
+  doc.setFontSize(7.5);doc.setFont("helvetica","bold");doc.setTextColor(...VE);doc.text("FORMA DE PAGO",M+5,y+6);
+  doc.setFont("helvetica","normal");doc.setFontSize(7.5);doc.setTextColor(80,90,90);
+  doc.text("Banco Pichincha - Cuenta Corriente: 2100318752",M+5,y+12);
+  doc.text("Beneficiario: Luis Alberto Pazmino Quevedo - C.I.: 0930706742",M+5,y+18);
+  doc.text("Confirmacion: im.agrojardineria@hotmail.com - Validez: 8 dias calendario",M+5,y+24);
+  doc.setFillColor(26,26,26);doc.rect(0,282,W,15,"F");
+  doc.setFontSize(7);doc.setFont("helvetica","normal");doc.setTextColor(110,110,110);
+  doc.text("IM AGROJARDINERIA - RUC: 0930706742001 - Daule, Guayas - im.agrojardineria@hotmail.com",W/2,290,{align:"center"});
+  if(pf.vendedor||pf.waVendedor){
+    const vi=[pf.vendedor,pf.waVendedor?"WA: "+pf.waVendedor:""].filter(Boolean).join(" | ");
+    doc.text("Vendedor: "+vi,W/2,294,{align:"center"});
+  }
+  doc.save("Proforma_"+pf.numero+".pdf");
+}
+function waText(){
+  const{sub,card}=totals();
+  let t="*PROFORMA "+pf.numero+"* - IM Agrojardineria\nFecha: "+pf.fecha+"\n\n";
+  if(pf.cliente)t+="*Cliente:* "+pf.cliente+"\n";
+  if(pf.ruc)t+="*RUC/CI:* "+pf.ruc+"\n";
+  if(pf.telefono)t+="*Tel:* "+pf.telefono+"\n";
+  if(pf.empresa)t+="*Empresa:* "+pf.empresa+"\n";
+  if(pf.ciudad)t+="*Ciudad:* "+pf.ciudad+"\n";
+  t+="\n*PRODUCTOS:*\n";
+  cart.forEach(i=>{t+="- "+i.qty+"x "+i.name+"  *"+usd(i.pvp*i.qty)+"*\n";});
+  t+="\n*TOTAL CONTADO: "+usd(sub)+"*\nCon tarjeta (+10%): "+usd(card)+"\n\n";
+  t+="Garantia: 12 meses (hasta 24 con mantenimiento IM)\n";
+  t+="Entrega: 24h confirmado el pago\n\n";
+  t+="Banco Pichincha - Cta. Cte. 2100318752\n";
+  t+="Luis Alberto Pazmino - CI 0930706742\n";
+  t+="im.agrojardineria@hotmail.com";
+  if(pf.vendedor||pf.waVendedor)t+="\n\nVendedor: "+pf.vendedor+(pf.waVendedor?" | WA: "+pf.waVendedor:"");
+  return t;
+}
+function openWA(){
+  if(!cart.length){showToast("Agrega productos primero");return;}
+  const num=(pf.waVendedor||"593963084438").replace(/\D/g,"");
+  window.open("https://wa.me/"+num+"?text="+encodeURIComponent(waText()),"_blank");
+}
+function copyWA(){
+  navigator.clipboard&&navigator.clipboard.writeText(waText()).then(()=>showToast("Copiado al portapapeles"));
+}
+let toastTimer;
+function showToast(msg){
+  const el=document.getElementById("toast");
+  el.textContent=msg;el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove("show"),2400);
+}
+</script>
+</body>
+</html>
